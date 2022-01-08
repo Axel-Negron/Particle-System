@@ -1,0 +1,18 @@
+{
+    //"terminal.integrated.shell.windows": "C:\\msys64\\mingw32.exe",
+
+    "terminal.integrated.shell.windows": "C:\\msys64\\usr\\bin\\bash.exe",
+        "terminal.integrated.shellArgs.windows": [
+            "--login",
+        ],
+        "terminal.integrated.env.windows": {
+            "CHERE_INVOKING": "1",
+            "MSYSTEM": "MINGW32",
+        },
+
+    "terminal.integrated.automationShell.windows": null,
+    "code-runner.executorMap": {
+        "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt -g && $dir$fileNameWithoutExt"
+    },
+    "terminal.explorerKind": "external",
+}
