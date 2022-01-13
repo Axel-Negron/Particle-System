@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Particle.h"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp
 {
@@ -19,7 +20,6 @@ private:
 	int p_counterdraw;
 	int brush_size;
 	int brush_colors[3];
-	int brush_color_cycle = 0;
 	int replay_timer = 0;
 	unsigned int replay_index = 0;
 
@@ -71,7 +71,6 @@ public:
 	int get_pcount_draw() { return p_counterdraw; }
 	int get_brush_size() { return brush_size; }
 	int get_brush_color(int pos) { return brush_colors[pos]; }
-	int get_brush_toggle_cycle() { return brush_color_cycle; }
 	int get_replay_index() { return replay_index; }
 	int get_replay_timer() { return replay_timer; }
 
@@ -92,11 +91,23 @@ public:
 	void reset_brush_size() { brush_size = 15; }
 	void set_brush_size(int val) { brush_size += val; }
 	void set_brush_color(int pos, int hue) { brush_colors[pos] += hue; }
-	void set_brush_color_cycle(int val) { brush_color_cycle += val; }
 	void set_replay_index() { replay_index++; }
 	void set_replay_counter() { replay_timer++; }
 	void reset_replay_index() { replay_index = 0; }
 	void reset_replay_counter() { replay_timer = 0; }
+
+
+	ofxPanel gui;
+	ofxLabel colors;
+	ofxLabel sizelbl;
+	ofxLabel clearcanvas;
+	ofxIntSlider size;
+	ofxFloatSlider R;
+	ofxFloatSlider G;
+	ofxFloatSlider B;
+	ofxToggle cleartoggle;
+
+
 	//Adding Random_color_generator_function
 
 	int color_generator()

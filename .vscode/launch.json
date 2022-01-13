@@ -8,7 +8,7 @@
             "name": "Linux Ubuntu",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/PA1-ParticleSystem",
+            "program": "${workspaceFolder}/bin/Particle-System",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

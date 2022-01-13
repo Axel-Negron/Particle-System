@@ -4,7 +4,16 @@
 void ofApp::setup()
 {
 	ofSetVerticalSync(true);
-
+	gui.setup("","settings.xml",ofGetWidth()-250,10);
+	gui.add(colors.setup("Change","color",20,10));
+	gui.add(R.setup("R",0,0,255));
+	gui.add(G.setup("G",0,0,255));
+	gui.add(B.setup("B",0,0,255));	
+	gui.add(sizelbl.setup("Change","size",20,10));
+	gui.add(size.setup("Brush size",15,1,100));
+	gui.add(clearcanvas.setup("Clear","Canvas",20,10));
+	gui.add(cleartoggle.setup("Clear Canvas"));
+	
 	int num = 1500;
 	p.assign(num, Particle());
 	currentMode = PARTICLE_MODE_ATTRACT;
@@ -54,7 +63,7 @@ void ofApp::resetParticles()
 //--------------------------------------------------------------
 void ofApp::update()
 {
-
+	
 	//Split update method into two. One works outside DRAW mode, otherr works with the rest of the modes.
 	if (currentMode != PARTICLE_MODE_DRAW)
 	{
@@ -66,10 +75,15 @@ void ofApp::update()
 	}
 	else
 	{
+		preview.draw_colors[0] = R; preview.draw_colors[1] = G; preview.draw_colors[2] = B;
 		for (unsigned int i = 0; i < p_draw.size(); i++)
 		{
 			p_draw[i].setMode(currentMode);
 			p_draw[i].update();
+		}
+		if(cleartoggle){
+			p_draw.clear();
+			reset_pcounter_val();
 		}
 	}
 	//lets add a bit of movement to the attract points
@@ -167,6 +181,8 @@ void ofApp::update()
 	}
 
 	start_timer();
+	
+
 }
 
 //--------------------------------------------------------------
@@ -183,9 +199,9 @@ void ofApp::draw()
 			p[i].draw();
 		}
 		ofSetColor(230);
-		string brush_size_text = to_string(get_brush_size());
-		ofDrawBitmapString("Draw Controls:\nj-hold to decreases current hue value\nk-hold to increase current hue value\nUse l to cycle between rgb hues.\nm-changes canvas to white", 10, 200);
-		ofDrawBitmapString(currentModeStr + "\n\nSpacebar to reset. \nKeys 1-5 to change mode. \nB-Key changes background color. \n[ Pauses simulation.\n] Resumes simulation.\nd-decrease particle size.\ni-increase particle size.\ns-decrease particle velocity.\nf-increase particle velocity.", 10, 20);
+		string brush_size_text = to_string(size);
+		ofDrawBitmapString("Draw Controls:\nm-changes canvas to white", 10, 200);
+		ofDrawBitmapString(currentModeStr + "\n\nSpacebar to reset. \nKeys 1-5 to change mode. \nB-Key changes background color. \n[ Pauses simulation.\n] Resumes simulation.\ns-decrease particle velocity.\nf-increase particle velocity.", 10, 20);
 	}
 	else
 	{
@@ -201,25 +217,10 @@ void ofApp::draw()
 		if (!hide_ui)
 		{
 
-			string brush_size_text = to_string(get_brush_size());
+			string brush_size_text = to_string(size);
 			preview.draw();
 			ofSetColor(0);
-			ofDrawBitmapString("Draw Controls:\nj-Decreases current hue value\nk-Increases current hue value\nl-cycle between rgb hues.\nm-Changes canvas to white\nd-Decrease brush size.\ni-Increase brush size.\nh-Hides/Shows UI\n\nBrush size: " + brush_size_text, 10, 100);
-			if (get_brush_toggle_cycle() == 0)
-			{
-				ofSetColor(0);
-				ofDrawBitmapString("Changing Red value", 10, 240);
-			}
-			else if (get_brush_toggle_cycle() == 1)
-			{
-				ofSetColor(0);
-				ofDrawBitmapString("Changing Green value", 10, 240);
-			}
-			else
-			{
-				ofSetColor(0);
-				ofDrawBitmapString("Changing Blue value", 10, 240);
-			}
+			ofDrawBitmapString("Draw Controls:\nm-Changes canvas to white\nd-Decrease brush size.\ni-Increase brush size.\nh-Hides/Shows UI\n\nBrush size: " + brush_size_text, 10, 100);
 			ofDrawBitmapString(currentModeStr + "\n\nSpacebar to reset. \nKeys 1-5 to change mode. \nB-Key changes background color.", 10, 20);
 		}
 	}
@@ -248,6 +249,7 @@ void ofApp::draw()
 		ofSetColor(255, 0, 0);
 		ofDrawCircle(1000, 670, 20);
 	}
+	gui.draw();
 }
 
 //------------------------------------------------------------------------------------
@@ -369,7 +371,7 @@ void ofApp::keyPressed(int key)
 
 	if (key == '5' && !replay)
 	{
-		reset_brush_size();
+		size = 15;
 		reset_pcounter_val();
 		currentMode = PARTICLE_MODE_DRAW;
 		currentModeStr = "Drawing:";
@@ -444,55 +446,10 @@ void ofApp::keyPressed(int key)
 	}
 
 	//Increases particle size by changing individual p.size
-	if (key == 'i' && !replay)
-	{
 
-		if (get_is_recording())
-		{
-
-			stored_mode.push_back(PARTICLE_MODE_SUP);
-			stored_counter.push_back(get_record_timer());
-			reset_record_timer();
-		}
-
-		for (unsigned i = 0; i < p.size(); i++)
-		{
-
-			if (p[i].get_scale() < p[i].get_scale_limit(0))
-			{
-				p[i].set_scale((3));
-			}
-		}
-		if (currentMode == PARTICLE_MODE_DRAW && (get_brush_size() + 2) < 1000)
-		{
-			set_brush_size(2);
-		}
-	}
 
 	//Decreases particle size by changing individual p.size
-	if (key == 'd' && !replay)
-	{
 
-		if (get_is_recording())
-		{
-
-			stored_mode.push_back(PARTICLE_MODE_SDOWN);
-			stored_counter.push_back(get_record_timer());
-			reset_record_timer();
-		}
-
-		for (unsigned i = 0; i < p.size(); i++)
-		{
-			if (p[i].get_scale() > p[i].get_scale_limit(1))
-			{
-				p[i].set_scale((.333333333));
-			}
-		}
-		if (currentMode == PARTICLE_MODE_DRAW && (get_brush_size() - 2) > 0)
-		{
-			set_brush_size(-2);
-		}
-	}
 
 	//Starts recording mode, sets up recording vector to store mode, additional vector stores time spent in mode.
 	if (key == 'r' && !replay)
@@ -528,36 +485,6 @@ void ofApp::keyPressed(int key)
 
 			p_draw.clear();
 			reset_pcounter_val();
-		}
-	}
-
-	// Keys l,k,j are used to change brush color by passing color val when creating particle at mouse position.
-	if (key == 'l' && !replay)
-	{
-		if (get_brush_toggle_cycle() + 1 <= 2)
-		{
-			set_brush_color_cycle(1);
-		}
-		else
-		{
-			set_brush_color_cycle(-2);
-		}
-	}
-
-	if (key == 'j' && !replay)
-	{
-		if (get_brush_color(brush_color_cycle) - 10 >= 0)
-		{
-			set_brush_color(brush_color_cycle, -10);
-			preview.draw_colors[brush_color_cycle] = get_brush_color(brush_color_cycle);
-		}
-	}
-	if (key == 'k' && !replay)
-	{
-		if (get_brush_color(brush_color_cycle) + 10 >= 0)
-		{
-			set_brush_color(brush_color_cycle, 10);
-			preview.draw_colors[brush_color_cycle] = get_brush_color(brush_color_cycle);
 		}
 	}
 
@@ -650,12 +577,12 @@ void ofApp::mouseDragged(int x, int y, int button)
 	if (held && button == OF_MOUSE_BUTTON_LEFT)
 	{
 		p_draw.push_back(Particle());
-		p_draw[get_pcount_draw()].drawscale = get_brush_size();
+		p_draw[get_pcount_draw()].drawscale = size;
 		p_draw[get_pcount_draw()].drawpos[0] = ofGetMouseX();
 		p_draw[get_pcount_draw()].drawpos[1] = ofGetMouseY();
-		p_draw[get_pcount_draw()].draw_colors[0] = get_brush_color(0);
-		p_draw[get_pcount_draw()].draw_colors[1] = get_brush_color(1);
-		p_draw[get_pcount_draw()].draw_colors[2] = get_brush_color(2);
+		p_draw[get_pcount_draw()].draw_colors[0] = R;
+		p_draw[get_pcount_draw()].draw_colors[1] = G;
+		p_draw[get_pcount_draw()].draw_colors[2] = B;
 		set_pcounter_val(1);
 	}
 }
@@ -669,12 +596,12 @@ void ofApp::mousePressed(int x, int y, int button)
 	{
 
 		p_draw.push_back(Particle());
-		p_draw[get_pcount_draw()].drawscale = get_brush_size();
+		p_draw[get_pcount_draw()].drawscale = size;
 		p_draw[get_pcount_draw()].drawpos[0] = ofGetMouseX();
 		p_draw[get_pcount_draw()].drawpos[1] = ofGetMouseY();
-		p_draw[get_pcount_draw()].draw_colors[0] = get_brush_color(0);
-		p_draw[get_pcount_draw()].draw_colors[1] = get_brush_color(1);
-		p_draw[get_pcount_draw()].draw_colors[2] = get_brush_color(2);
+		p_draw[get_pcount_draw()].draw_colors[0] = R;
+		p_draw[get_pcount_draw()].draw_colors[1] = G;
+		p_draw[get_pcount_draw()].draw_colors[2] = B;
 		set_pcounter_val(1);
 	}
 }

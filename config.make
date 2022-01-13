@@ -8,7 +8,7 @@
 #   The location of your root openFrameworks installation
 #       (default) OF_ROOT = ../../.. 
 ################################################################################
-# OF_ROOT = ../../..
+OF_ROOT = /home/musker/Desktop/of_v0.11.2_linux64gcc6_release
 
 ################################################################################
 # PROJECT ROOT

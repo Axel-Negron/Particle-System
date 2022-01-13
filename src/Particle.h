@@ -22,14 +22,15 @@ class Particle
 private:
 	int Pr_color1[3];
 	int begin = 0;
-	int is_stored = 0;
-	int is_paused = 0;
+	bool is_stored = 0;
+	bool is_paused = 0;
 	float stored_pos[2];
 	double scale_limit[2];
 	int vel_scale = 0;
 
 public:
 	Particle();
+	~Particle();
 
 	void setMode(particleMode newMode);
 	void setAttractPoints(vector<glm::vec3> *attract);
@@ -50,7 +51,7 @@ public:
 	float scale;
 	int drawpos[2];
 	double drawscale;
-	int draw_colors[3];
+	float draw_colors[3];
 
 	particleMode mode;
 
@@ -67,9 +68,9 @@ public:
 	double get_scale() { return scale; }
 	int get_vel_scale() { return vel_scale; }
 	//setter
-	void set_is_stored(int check) { is_stored = check; }
+	void set_is_stored(bool check) { is_stored = check; }
 	void set_Prcolor1(int color, int value) { Pr_color1[value] = color; }
-	void set_is_paused(int paused_value) { is_paused = paused_value; }
+	void set_is_paused(bool paused_value) { is_paused = paused_value; }
 	void set_stored_pos(int position, float value) { stored_pos[position] = value; }
 	void set_begin(int start) { begin = start; }
 	void set_scale_limit(double scale_value, int i) { scale_limit[i] = scale_value; }

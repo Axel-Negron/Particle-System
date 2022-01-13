@@ -6,6 +6,11 @@ Particle::Particle()
 	attractPoints = NULL;
 }
 
+
+//-------------------------------------------------------------------
+Particle::~Particle(){
+	
+}
 //------------------------------------------------------------------
 void Particle::setMode(particleMode newMode)
 {
