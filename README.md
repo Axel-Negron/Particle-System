@@ -5,3 +5,5 @@ This project is based on the OpenFrameworks Particle example.
 ## Setup
 1. Clone this project inside an OpenFrameworks installation's "apps/myApps/" directory
 2. Run the command "make" in the terminal or the "Build" Task in VSCode.
+3. 
+![Screenshot from 2022-01-13 12-22-51](https://user-images.githubusercontent.com/41030899/149411251-b92727e0-457c-499f-acbe-0556ceaca338.png)
