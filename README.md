@@ -3,11 +3,11 @@ This project is based on the OpenFrameworks Particle example.
  This repository is part of a Programming Assignment for the Advanced Programming Course. A startup template was provided which I utilized then to build the particle system alongside with its other features.
  
 ## Features
--Repulsion/Attraction/Freefall/Near-Point Simulations
--Pause/Play features
--Draw mode utilizing particles
--Other
--Gui
+* Repulsion/Attraction/Freefall/Near-Point Simulations
+* Pause/Play features
+* Draw mode utilizing particles
+* Other
+* Gui
 
 ## Setup
 1. Clone this project inside an OpenFrameworks installation's "apps/myApps/" directory
